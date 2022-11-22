@@ -68,14 +68,12 @@ span{
 }
 </style>
 <?php
-    $admin = new Login();
+    include '../controller/AdminController.php'; // ..: là thoát ra ngoài;
     if(isset($_POST['doi_mk']) && isset($_GET['username'])){
-        $username = $_GET['username'];
-        $pass_old = md5($_POST['pass_old']);
-        $pass_new = md5($_POST['pass_new']);
-        $re_pass = md5($_POST['re_pass']);
-        $change_pass_admin = $admin -> change_pass_admin($username,$pass_old,$pass_new,$re_pass);
-    }
+		$adminController = new AdminController();
+		$change_pass_admin = $adminController->changePass();
+		
+	}
 
 ?>
 <div class="card login-form">
@@ -83,15 +81,15 @@ span{
 		<h3 class="card-title text-center">Change password</h3>
 			<form action="" method="POST">
                 <div class="form-group">
-					<label for="exampleInputEmail1">Your currency password</label>
+					<label for="exampleInputEmail1">Mật khẩu hiện tại</label>
 					<input type="password" class="form-control form-control-sm" name="pass_old">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Your new password</label>
+					<label for="exampleInputEmail1">Mật khẩu mới</label>
 					<input type="password" class="form-control form-control-sm" name="pass_new">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Repeat password</label>
+					<label for="exampleInputEmail1">Nhập lại mật khẩu</label>
 					<input type="password" class="form-control form-control-sm" name="re_pass">
 				</div>
                 <div class="form-group">
@@ -101,7 +99,7 @@ span{
                         }
                     ?>
                 </div>
-				<button type="submit" class="btn btn-primary btn-block submit-btn" name="doi_mk">Confirm</button>
+				<button type="submit" class="btn btn-primary btn-block submit-btn" name="doi_mk">Xác nhận</button>
 			</form>
 		</div>
 	</div>

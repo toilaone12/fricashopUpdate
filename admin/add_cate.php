@@ -28,12 +28,12 @@
 <body>
     <div class="id-main">
         <?php
-            include '../admin/include/header.php';
-            include '../admin/include/navigation.php';
+            include_once '../admin/include/header.php';
+            include_once '../admin/include/navigation.php';
         ?>
         <?php
-            include '../classes/category.php';
-            $cate = new Category(); //gọi tên class
+            include_once '../controller/CategoryController.php';
+            $cateController = new CategoryController(); //gọi tên class
             if(isset($_POST['themdanhmuc'])){
                 if(isset($_FILES['anh_danh_muc']['name'])){
                     $anh_danh_muc = $_FILES['anh_danh_muc']['name'];
@@ -42,7 +42,7 @@
                      echo "Lỗi";
                 }
                 $ten_danh_muc = $_POST['ten_danh_muc'];
-                $add_cart = $cate->insert_category($anh_danh_muc_tmp,$anh_danh_muc,$ten_danh_muc); // tham chiếu đến hàm trong lớp được gọi
+                $insertCart = $cateController->insertCate($anh_danh_muc_tmp,$anh_danh_muc,$ten_danh_muc);
             }else{
                 // echo "F"; 
             }
@@ -58,8 +58,8 @@
                                 <div class="card-body">
                                     <h4 class="card-title">Thêm danh mục</h4>
                                     <?php
-                                        if(isset($add_cart)){
-                                            echo "<span>".$add_cart."</span>";
+                                        if(isset($insertCart)){
+                                            echo "<span>".$insertCart."</span>";
                                         }
                                     ?>
                                     <div class="form-group row" >

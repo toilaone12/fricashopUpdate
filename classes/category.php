@@ -55,7 +55,6 @@
                 $alert = "Tên danh mục và hình ảnh không được bỏ trống!";
                 return $alert;
             }else{
-                $link_anh = "http://192.168.43.42/FricaShop/admin/img/";
                 $dir = "./img/";
                 // echo $dir;
                 if(!file_exists($dir)){
@@ -63,9 +62,8 @@
                 }
                 // $name = "/".rand()."_".time().".png";
                 $dir = $dir.$hinh_anh;
-                if(copy($tmp,$dir)){
-                    $file_anh = $link_anh.$hinh_anh;
-                    $query = "INSERT INTO category VALUES(null,'$ten_danh_muc','$file_anh')";
+                if(move_uploaded_file($tmp,$dir)){
+                    $query = "INSERT INTO category VALUES(null,'$ten_danh_muc','$hinh_anh')";
                     // echo $query;
                     $result = $this->db->insert($query); //$this->db là lớp Database
                     if($result){
@@ -87,11 +85,11 @@
             //kết nối với CSDL
             // $username = mysqli_real_escape_string($this->db->link,$username); //Thoát các ký tự đặc biệt trong chuỗi truy vấn SQL
             $ten_danh_muc = mysqli_real_escape_string($this->db->link,$ten_danh_muc);
-            if(empty($anh_danh_muc) || empty($ten_danh_muc)){
+            if(empty($ten_danh_muc)){
                 $alert = "Tên danh mục và hình ảnh không được bỏ trống!";
                 return $alert;
             }else{
-                $link_anh = "http://192.168.43.42/FricaShop/admin/img/";
+                // $link_anh = "http://192.168.43.42/FricaShop/admin/img/";
                 $dir = "./img/";
                 // echo $dir;
                 if(!file_exists($dir)){
@@ -100,8 +98,8 @@
                 // $name = "/".rand()."_".time().".png";
                 $dir = $dir.$anh_danh_muc;
                 if(copy($tmp,$dir)){
-                    $file_anh = $link_anh.$anh_danh_muc;
-                    $query = "UPDATE category SET name = '$ten_danh_muc', image = '$file_anh' WHERE cate_id = $id";
+                    // $file_anh = $link_anh.$anh_danh_muc;
+                    $query = "UPDATE category SET name = '$ten_danh_muc', image = '$anh_danh_muc' WHERE cate_id = $id";
                     // echo $query;
                     $result = $this->db->update($query); //$this->db là lớp Database
                     if($result){
@@ -112,8 +110,16 @@
                         return $alert;
                     }
                 }else{
-                    $alert = "Không thêm hình ảnh vào được!";
-                    return $alert;
+                    $query = "UPDATE category SET name = '$ten_danh_muc' WHERE cate_id = $id";
+                    // echo $query;
+                    $result = $this->db->update($query); //$this->db là lớp Database
+                    if($result){
+                        $alert = '<span style="color:green;">Sửa thành công danh mục '.$ten_danh_muc.' vào danh muc!</span>';
+                        return $alert;
+                    }else{
+                        $alert = '<span style="color:red";>Sửa danh mục thất bại!</span>';
+                        return $alert;
+                    }
                 }
                 
             }

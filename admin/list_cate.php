@@ -30,24 +30,23 @@
         <?php
             include '../admin/include/header.php';
             include '../admin/include/navigation.php';
-            include '../classes/category.php';
-            $cate = new Category(); //gọi tên class
-        ?>
-        <?php
-            if(isset($_GET['id'])){
-                $id = $_GET['id'];
-                $delete_cate = $cate -> delete_category($id);
-                if($delete_cate){
-                    echo $delete_cate;
-                }
-            }
-        ?>
-        <?php
-            $number = $cate->select_number_list();
+            include '../controller/CategoryController.php';
+            $cateController = new CategoryController(); //gọi tên class
+            $number = $cateController->selectPage();
             if(isset($_GET['sotrang'])){
                 $sotrang = $_GET['sotrang'];
             }else{
                 $sotrang = "";
+            }
+            $listCate = $cateController->listCategory($sotrang);
+        ?>
+        <?php
+            if(isset($_GET['id'])){
+                $id = $_GET['id'];
+                $deleteCate = $cateController->deleteCate($id);
+                if($deleteCate){
+                    echo "<script>location.href='list_cate.php'</script>";
+                }
             }
         ?>
     <div class="content">
@@ -70,16 +69,15 @@
                                     </thead>
                                     <tbody>
                                         <?php
-                                            $show_cate = $cate->get_all_category($sotrang);
-                                            if($show_cate){
+                                            if($listCate){
                                                 $i = 0;
-                                                while($value = $show_cate->fetch_assoc()){
+                                                while($value = $listCate->fetch_assoc()){
                                                 $i++;
                                         ?>
                                         <tr align="center">
                                             <td width="50"><?php echo $i;?></td>
                                             <td width="150"><?php echo $value['cate_id'];?></td>
-                                            <td><img style="width: 100px; height: 100px;" src="<?php echo $value['image']?>" alt=""></td>
+                                            <td><img style="width: 100px; height: 100px;" src="./img/<?php echo $value['image']?>" alt=""></td>
                                             <td width="200"><?php echo $value['name'];?></td>
                                             <td>
                                                 <a style="text-decoration: none; margin-right: 70px" class="btn btn-success" href="edit_cate.php?id=<?php echo $value['cate_id'];?>">Sửa</a>

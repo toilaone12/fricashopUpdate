@@ -28,12 +28,13 @@
 <?php
     include '../admin/include/header.php';
     include '../admin/include/navigation.php';
-    include '../classes/category.php';
-    $cate = new Category(); //gọi tên class
+    include '../controller/CategoryController.php';
+    $cateController = new CategoryController(); //gọi tên class
 ?>
 <?php
     if(isset($_GET['id'])){
         $id = $_GET['id'];
+        $cateById = $cateController->getCategoryById($id);
     }else{
         // echo "<script>window.location = 'list_cate.php'</script>";
     }
@@ -41,7 +42,7 @@
         $tmp = $_FILES['anh_danh_muc']['tmp_name'];
         $anh_danh_muc = $_FILES['anh_danh_muc']['name'];
         $ten_danh_muc = $_POST['ten_danh_muc'];
-        $update_data = $cate->update_category($id,$tmp,$anh_danh_muc,$ten_danh_muc);
+        $editCate = $cateController->editCate($id,$tmp,$anh_danh_muc,$ten_danh_muc);
     }else{
         // echo "F";
     }
@@ -57,18 +58,17 @@
                         <div class="card-body">
                             <h4 class="card-title">Sửa danh mục</h4>
                             <?php
-                                if(isset($update_data)){
-                                    echo "<span>".$update_data."</span>";
+                                if(isset($editCate)){
+                                    echo "<span>".$editCate."</span>";
                                 }
                             ?>
                             <?php
-                                $show_cate_by_id_cate = $cate->get_category_by_id_cate($id);
-                                $row = $show_cate_by_id_cate->fetch_assoc();
+                                $row = $cateById->fetch_assoc();
                             ?>
                             <div class="form-group row" style="margin-top:10px;">
                                 <label for="lname" class="col-sm-3 text-right control-label col-form-label">Hình ảnh danh mục</label>
                                 <div class="col-sm-9" style="display:flex; margin-top:10px">
-                                    <img type="image" style="margin-right: 10px; width:30px; height:30px;" class="" src="<?php echo $row['image'];?>">  
+                                    <img type="image" style="margin-right: 10px; width:30px; height:30px;" class="" src="./img/<?php echo $row['image'];?>">  
                                     <input type="file" name="anh_danh_muc" id="" value="<?php echo $row['image'];?>">
                                 </div>
                             </div>

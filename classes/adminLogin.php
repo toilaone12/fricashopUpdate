@@ -25,24 +25,19 @@
             //kết nối với CSDL
             $username = mysqli_real_escape_string($this->db->link,$username); //Thoát các ký tự đặc biệt trong chuỗi truy vấn SQL
             $password = mysqli_real_escape_string($this->db->link,$password);
-            if(empty($username) || empty($password)){
-                $alert = "Tài khoản và mật khẩu không được bỏ trống!";
-                return $alert;
-            }else{
-                $query = "SELECT * FROM admin WHERE email_admin = '$username' AND pass_admin = '$password' LIMIT 1";
-                // echo $query;
-                $result = $this->db->select($query); //$this->db là lớp Database
-                return $result;
-            }
+            $query = "SELECT * FROM admin WHERE email_admin = '$username' AND pass_admin = '$password' LIMIT 1";
+            // echo $query;
+            $result = $this->db->select($query); //$this->db là lớp Database
+            return $result;
         }
 
         public function change_pass_admin($username,$pass_old,$pass_new,$re_pass){
-            $regex_pass = '/^[a-zA-Z0-9]{6,32}$/';
             $query = "SELECT * FROM admin WHERE email_admin = '$username'";
             $result = $this->db->select($query);
             if($result->num_rows > 0){
                 $row = $result->fetch_assoc();
                 if($pass_old == $row['pass_admin']){
+                    $regex_pass = '/^[a-zA-Z0-9]{6,32}$/';
                     // echo $pass_new;
                     if(preg_match($regex_pass,$pass_new)){
                         if($pass_new == $re_pass){
@@ -63,6 +58,7 @@
                     return '<span style="color: red;">Mật khẩu không đúng với mật khẩu hiện tại!</span>';
                 }
             }
+            
         }
         public function login_destroy(){
 
