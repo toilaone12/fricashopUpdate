@@ -84,15 +84,13 @@
                 $alert = "<span color: red;>Thông tin điền chưa đầy đủ!</span>";
                 return $alert;
             }else{
-                $link_anh = "http://192.168.43.42/FricaShop/admin/img/";
                 $dir = "./img/";
                 if(!file_exists($dir)){
                     mkdir($dir,0755,true);
                 }
                 $dir = $dir.$image_name;
                 if(copy($tmp,$dir)){
-                    $file_anh = $link_anh.$image_name;
-                    $query = "INSERT INTO product VALUES (null,$cate_id,'$name',$quantity,$price,'$file_anh','$link_ytb','$desc')";
+                    $query = "INSERT INTO product VALUES (null,$cate_id,'$name',$quantity,$price,'$image_name','$link_ytb','$desc')";
                     // echo $query;
                     $result = $this->db->insert($query);
                     if($result){
@@ -106,38 +104,28 @@
             }
         }
         public function update_product($id,$tmp,$image_name,$cate_id,$name,$quantity,$price,$link_ytb,$desc){
-            $id = $this->fm->validation($id);
-            $cate_id = $this->fm->validation($cate_id);
-            $name = $this->fm->validation($name);
-            $quantity = $this->fm->validation($quantity);
-            $link_ytb = $this->fm->validation($link_ytb);
-            $desc = $this->fm->validation($desc);
-            $image_name = $this->fm->validation($image_name);
-            $price = $this->fm->validation($price);
-
-            //connect to Database
-            $id = mysqli_real_escape_string($this->db->link,$id);
-            $cate_id = mysqli_real_escape_string($this->db->link,$cate_id);
-            $name = mysqli_real_escape_string($this->db->link,$name);
-            $quantity = mysqli_real_escape_string($this->db->link,$quantity);
-            $price = mysqli_real_escape_string($this->db->link,$price);
-            $link_ytb = mysqli_real_escape_string($this->db->link,$link_ytb);
-            $desc = mysqli_real_escape_string($this->db->link,$desc);
-            $quantity = mysqli_real_escape_string($this->db->link,$quantity);
-
             if(empty($id) && empty($image_name) && empty($cate_id) && empty($name) && empty($quantity) && empty($price) && empty($link_ytb) && empty($desc)){
                 $alert = "<span color: red;>Thông tin điền chưa đầy đủ!</span>";
                 return $alert;
             }else{
-                $link_anh = "http://192.168.43.42/FricaShop/admin/img/";
                 $dir = "./img/";
                 if(!file_exists($dir)){
                     mkdir($dir,0755,true);
                 }
                 $dir = $dir.$image_name;
-                if(copy($tmp,$dir)){
-                    $file_anh = $link_anh.$image_name;
-                    $query = "UPDATE product SET cate_id = $cate_id, name_pr = '$name', quantity = '$quantity', price = $price, image_pr = '$file_anh', link_ytb = '$link_ytb', description = '$desc' WHERE product_id = $id";
+                if(move_uploaded_file($tmp,$dir)){
+                    $query = "UPDATE product SET cate_id = $cate_id, name_pr = '$name', quantity = '$quantity', price = $price, image_pr = '$image_name', link_ytb = '$link_ytb', description = '$desc' WHERE product_id = $id";
+                    // echo $query;
+                    $result = $this->db->update($query);
+                    if($result){
+                        $alert = '<span style="color:green;">Sửa thành công sản phẩm '.$name.' vào danh muc!</span>';
+                        return $alert;
+                    }else{
+                        $alert = '<span style="color:red";>Sửa sản phẩm thất bại!</span>';
+                        return $alert;
+                    }
+                }else{
+                    $query = "UPDATE product SET cate_id = $cate_id, name_pr = '$name', quantity = '$quantity', price = $price, link_ytb = '$link_ytb', description = '$desc' WHERE product_id = $id";
                     // echo $query;
                     $result = $this->db->update($query);
                     if($result){
@@ -241,7 +229,7 @@
             $query = "SELECT * FROM product";
             $result = $this->db->select($query);
             if($result -> num_rows > 0){
-                $count_pages = ceil(($result->num_rows) / 10);
+                $count_pages = floor(($result->num_rows) / 10);
                 return $count_pages;
             }else{
             }

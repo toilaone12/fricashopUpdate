@@ -28,13 +28,13 @@
 <body>
     <div class="id-main">
         <?php
-            include_once '../classes/cart.php';
-            $cart = new Cart(); //gọi tên class
+            include_once '../controller/BillController.php';
+            $cart = new BillController(); //gọi tên class
         ?>
         <?php
             if(isset($_GET['id_cart'])){
                 $id_cart = $_GET['id_cart'];
-                $detail_cart = $cart->get_detail_cart_by_id($id_cart);
+                $detailCart = $cart->getCartId($id_cart);
             }
         ?>
         <div class="value" style="margin: 100px 20px">
@@ -58,10 +58,10 @@
                                     </thead>
                                     <tbody>
                                         <?php
-                                            if($detail_cart){
+                                            if($detailCart){
                                                 $i = 0;
                                                 $tong_tien = 0;
-                                                while($value = $detail_cart->fetch_assoc()){
+                                                while($value = $detailCart->fetch_assoc()){
                                                     $i++;
                                                     $thanh_tien = $value['gia_sp'];
                                                     $tong_tien += $thanh_tien;

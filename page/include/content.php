@@ -2,7 +2,7 @@
     <div class="container">
     <div class="catagary_main">
         <div class="catagary_left">
-            <h2 class="categary_text">New Courses</h2>
+            <h2 class="categary_text">Sản phẩm mới nhất</h2>
         </div>
         <div class="catagary_right">
             <div class="catagary_menu">
@@ -16,14 +16,14 @@
     <div class="container-fluid">
         <div class="row">
             <?php
-                $select_product = $product->get_all_product_page();
+                $listProduct = $product->listProductPage();
             ?>
             <?php
-                while($row_product = $select_product->fetch_assoc()){
+                while($row_product = $listProduct->fetch_assoc()){
             ?>
             <div class="col-md-4">
                 <div class="box_man" style="margin: 20px 0;">
-                    <div class="mobile_img"><img style="width:max-width; height:200px;" src="<?php echo $row_product['image_pr']?>"></div>
+                    <div class="mobile_img"><img style="width:max-width; height:200px;" src="../admin/img/<?php echo $row_product['image_pr']?>"></div>
                     <div class="computer_text_main">
                         <h4 class="dell_text" style="white-space:nowrap; width: max-width; overflow:hidden; text-overflow:ellipsis; margin-right:10px"><?php echo $row_product['name_pr']?></h4>
                         <h6 class="price_text" style="text-transform:lowercase !important;"><a href="#"><?php echo number_format($row_product['price'],0,',','.')?></a>đ</h6>
@@ -41,7 +41,7 @@
     <div class="container">
     <div class="catagary_main">
         <div class="catagary_left">
-            <h2 class="categary_text">Low Courses</h2>
+            <h2 class="categary_text">Sản phẩm giá thấp</h2>
         </div>
         <div class="catagary_right">
             <div class="catagary_menu">
@@ -55,14 +55,14 @@
     <div class="container-fluid">
         <div class="row">
             <?php
-                $select_low_product = $product->get_low_price_courses();
+                $listLowProduct = $product->listLowProduct();
             ?>
             <?php
-                while($row_product = $select_low_product->fetch_assoc()){
+                while($row_product = $listLowProduct->fetch_assoc()){
             ?>
             <div class="col-md-4">
                 <div class="box_man" style="margin: 20px 0;">
-                    <div class="mobile_img"><img style="width:max-width; height:200px;" src="<?php echo $row_product['image_pr']?>"></div>
+                    <div class="mobile_img"><img style="width:max-width; height:200px;" src="../admin/img/<?php echo $row_product['image_pr']?>"></div>
                     <div class="computer_text_main">
                         <h4 class="dell_text" style="white-space:nowrap; width: max-width; overflow:hidden; text-overflow:ellipsis; margin-right:10px"><?php echo $row_product['name_pr']?></h4>
                         <h6 class="price_text" style="text-transform:lowercase !important;"><a href="#"><?php echo number_format($row_product['price'],0,',','.')?></a>đ</h6>
@@ -80,7 +80,7 @@
     <div class="container">
     <div class="catagary_main">
         <div class="catagary_left" style="width:21%;">
-            <h2 class="categary_text">Average Courses</h2>
+            <h2 class="categary_text">Sản phẩm giá cao</h2>
         </div>
         <div class="catagary_right">
             <div class="catagary_menu">
@@ -94,14 +94,14 @@
     <div class="container-fluid">
         <div class="row">
             <?php
-                $select_average_product = $product->get_average_price_courses();
+                $listAverageProduct = $product->listAverageProduct();
             ?>
             <?php
-                while($row_product = $select_average_product->fetch_assoc()){
+                while($row_product = $listAverageProduct->fetch_assoc()){
             ?>
             <div class="col-md-4">
                 <div class="box_man" style="margin: 20px 0;">
-                    <div class="mobile_img"><img style="width:max-width; height:200px;" src="<?php echo $row_product['image_pr']?>"></div>
+                    <div class="mobile_img"><img style="width:max-width; height:200px;" src="../admin/img/<?php echo $row_product['image_pr']?>"></div>
                     <div class="computer_text_main">
                         <h4 class="dell_text" style="white-space:nowrap; width: max-width; overflow:hidden; text-overflow:ellipsis; margin-right:10px"><?php echo $row_product['name_pr']?></h4>
                         <h6 class="price_text" style="text-transform:lowercase !important;"><a href="#"><?php echo number_format($row_product['price'],0,',','.')?></a>đ</h6>

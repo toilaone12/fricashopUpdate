@@ -1,7 +1,7 @@
 <?php
-   include_once '../classes/slider.php';
-   $slider = new Slider();
-   $get_slider = $slider -> get_slider();
+   include_once '../controller/SliderController.php';
+   $slider = new SliderController();
+   $listSlider = $slider -> listSliderPage();
 ?>
 
 <div class="banner_section layout_padding">
@@ -11,15 +11,15 @@
                <div class="carousel-inner">
                   <div class="carousel-item active">
                      <?php
-                        $row_1 = $get_slider->fetch_assoc();
+                        $row_1 = $listSlider->fetch_assoc();
                      ?>
-                     <img class="d-block " style="margin: 0 auto; width: 1000px; height: 500px;" src="<?php echo $row_1['image_slider'];?>" alt="First slide">
+                     <img class="d-block " style="margin: 0 auto; width: 1000px; height: 500px;" src="../admin/img/<?php echo $row_1['image_slider'];?>" alt="First slide">
                   </div>
                   <?php
-                     while($row = $get_slider->fetch_assoc()){
+                     while($row = $listSlider->fetch_assoc()){
                   ?>
                   <div class="carousel-item">
-                     <img class="d-block " style="margin: 0 auto; width: 1000px; height: 500px;" src="<?php echo $row['image_slider'];?>" alt="Second slide">
+                     <img class="d-block " style="margin: 0 auto; width: 1000px; height: 500px;" src="../admin/img/<?php echo $row['image_slider'];?>" alt="Second slide">
                   </div>
                   <?php
                      }

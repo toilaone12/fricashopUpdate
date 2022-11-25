@@ -30,16 +30,22 @@
         <?php
             include '../admin/include/header.php';
             include '../admin/include/navigation.php';
-            include '../classes/customer.php';
-            $customer = new Customer(); //gọi tên class
+            include '../controller/CustomerController.php';
+            $customerController = new CustomerController(); //gọi tên class
         ?>
         <?php
             if(isset($_GET['customer_id'])){
                 $customer_id = $_GET['customer_id'];
-                $delete_customer = $customer->delete_customer($customer_id);
-                if($delete_customer){
-                    echo $delete_customer;
+                $deleteCustomer = $customerController->deleteCustomer($customer_id);
+                if($deleteCustomer){
+                    echo $deleteCustomer;
                 }
+            }
+            $pagination = $customerController->pagination();
+            if(isset($_GET['sotrang'])){
+                $sotrang = $_GET['sotrang'];
+            }else{
+                $sotrang = "";
             }
         ?>
     <div class="content">
@@ -66,10 +72,10 @@
                                     </thead>
                                     <tbody>
                                         <?php
-                                            $show_customer = $customer->get_list_customer();
-                                            if($show_customer){
+                                            $listCustomer = $customerController->listCustomer($sotrang);
+                                            if($listCustomer){
                                                 $i = 0;
-                                                while($value = $show_customer->fetch_assoc()){
+                                                while($value = $listCustomer->fetch_assoc()){
                                                 $i++;
                                         ?>
                                         <tr align="center">
@@ -91,6 +97,20 @@
                                     </tbody>
                         
                                 </table>
+                                <nav aria-label="..." >
+                                    <ul class="pagination pagination-sm" style="justify-content: center; margin-top:20px">
+                                        <?php
+                                            for($j = 1; $j <= $pagination; $j++){
+                                        ?>
+                                        <li class="page-item <?php echo ($j == $sotrang) ?  "disabled" : "" ?>">
+                                            <a class="page-link" href="?sotrang=<?php echo $j?>" tabindex="-1"><?php echo $j;?></a>
+                                        </li>
+                                        <?php
+                                            }
+                                        ?>
+                                    </ul>
+                                    
+                                </nav>
                             </form>
                         </div>
 

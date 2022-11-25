@@ -48,10 +48,10 @@
     spl_autoload_register(function($callName){
         include_once "../classes/".$callName.'.php';
     });
-    $customer = new Customer();
+    $customer = new CustomerController();
     if(isset($_POST['quen_mat_khau'])){
         $email = $_POST['email'];
-        $forgot_password = $customer -> forgot_password($email);
+        $forgot_password = $customer->forgotPassword($email);
     }
 ?>
 <section class="vh-100" style="padding-top:100px">

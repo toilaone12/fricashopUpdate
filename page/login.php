@@ -44,7 +44,7 @@
     // Session::init();
 ?>
 <?php
-    $customer = new Customer();
+    $customer = new CustomerController();
     if(Session::get('customer_login')){
         echo "<script>window.location.href='index.php'</script>";
     }
@@ -52,7 +52,7 @@
         // $kiem_tra = $_POST['kiem_tra'];
         $ten_dang_nhap = $_POST['ten_dang_nhap'];
         $mat_khau = md5($_POST['mat_khau']);
-        $login = $customer->login($ten_dang_nhap,$mat_khau);
+        $login = $customer->loginPage($ten_dang_nhap,$mat_khau);
     }
 ?>
 <section class="vh-100" style="padding-top:100px">
@@ -99,7 +99,7 @@
 
             <div class="text-center text-lg-start mt-4 pt-2">
                 <input type="submit" class="btn btn-primary btn-lg"
-                style="padding-left: 2.5rem; padding-right: 2.5rem;" name="dangnhap" value="Login">
+                style="padding-left: 2.5rem; padding-right: 2.5rem;" name="dangnhap" value="Đăng nhập">
                 <p class="small fw-bold mt-2 pt-1 mb-0">Bạn chưa có tài khoản? <a href="register.php"
                     class="link-danger">Đăng ký</a></p>
             </div>

@@ -13,17 +13,17 @@
     // hay chưa,nếu đã có thì nó sẽ dừng lại còn nếu có rồi nó sẽ thêm vào)
     // ob_clean();
     spl_autoload_register(function($className){
-        include_once '../classes/'.$className.'.php';
+        include_once '../controller/'.$className.'.php';
     }); //Tự auto loading trong include_once thay cho include cũng như require nhằm tránh quá nhiều tập tin cần include
 
     $db = new Database();
     $fm = new Format();
-    $cart = new Cart();
-    $product = new Product();
-    $cate = new Category();
+    $cart = new BillController();
+    $product = new ProductController();
+    $cate = new CategoryController();
 ?>
 <?php
-    $select_cate = $cate->get_all_cate();
+    $listCate = $cate->listCatePage();
 ?>
 <style>
 .cart__wrap{
@@ -205,7 +205,7 @@ h5{
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             <a href="index.php">Trang chủ</a>
             <?php
-                while($row_cate = $select_cate->fetch_assoc()){
+                while($row_cate = $listCate->fetch_assoc()){
             ?>
                 <a href="product_by_cate.php?cate_id=<?php echo $row_cate['cate_id'];?>&sotrang=1"><?php echo $row_cate['name'];?></a>
             <?php
@@ -266,23 +266,23 @@ h5{
                                 <?php
                                     if(isset($_GET['xoa'])){
                                         $xoa = $_GET['xoa'];
-                                        $delete = $cart->delete_cart($xoa);
+                                        $delete = $cart->deleteCart($xoa);
                                         // echo "<script>"
                                     }
-                                    $show_cart = $cart -> get_cart();
-                                    if($show_cart-> num_rows > 0){
+                                    $listCart = $cart->listCart();
+                                    if($listCart-> num_rows > 0){
                                 ?>
 
                                 <div class="buy__list-scroll">
                                     <h4 class="heading">Sản phẩm đã thêm vào</h4>       
                                 <?php
-                                    while($row = $show_cart->fetch_assoc()){
+                                    while($row = $listCart->fetch_assoc()){
                                 ?>
                                     <ul class="buy__list">
                                         <!--Cart-items-->
                                         <a href="details.php?product_id=<?php echo $row['product_id'];?>">
                                             <li class="buy--items">
-                                                <img src="<?php echo $row['image'];?>" alt="" class="buy--img">
+                                                <img src="../admin/img/<?php echo $row['image'];?>" alt="" class="buy--img">
                                                 <div class="buy__list-info">
                                                     <div class="buy__list-head">
                                                         <h5 class="buy__list-name"><?php echo $row['name_cart'];?></h5>
@@ -293,7 +293,6 @@ h5{
                                                         </div>     
                                                     </div>
                                                     <div class="buy__list-body">
-                                                        <span class="buy__list-description">Link youtube: <?php echo $row['link_ytb'];?></span>
                                                         <a class="buy__list-delete" href="?xoa=<?php echo $row['cart_id'];?>">Xoá</a>
                                                     </div>
                                                 </div>

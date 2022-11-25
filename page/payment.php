@@ -142,7 +142,7 @@
     include_once './include/header.php';
 ?>
 <?php
-    $cart = new Cart();
+    $cart = new BillController();
     if(isset($_POST['thanhtoan'])){
         $ten_khach_hang = $_POST['ten_khach_hang'];
         $email = $_POST['email'];
@@ -233,14 +233,14 @@
                                     </td>
                                 </tr>
                                 <?php
-                                    $select_cart = $cart->get_cart();
+                                    $select_cart = $cart->listCart();
                                     if($select_cart->num_rows > 0){
                                         while($row = $select_cart->fetch_assoc()){
                                 ?>
                                 <tr class="border-bottom">
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <div> <img style="width: 65px; height: 65px;" class="pic" src="<?php echo $row['image'];?>" alt=""> </div>
+                                            <div> <img style="width: 65px; height: 65px;" class="pic" src="../admin/img/<?php echo $row['image'];?>" alt=""> </div>
                                             <div class="ps-3 d-flex flex-column justify-content">
                                                 <p class="fw-bold"><?php echo $row['name_cart'];?></p>
                                             </div>

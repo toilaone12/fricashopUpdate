@@ -31,5 +31,12 @@
             $delete_cate = $cate -> delete_category($id);
             return $delete_cate;
         }
+
+        //page
+        public function listCatePage(){
+            $cate = new Category();
+            $listCatePage = $cate -> get_all_cate();
+            return $listCatePage;
+        }
     }    
 ?>

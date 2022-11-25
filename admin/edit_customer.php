@@ -28,9 +28,9 @@
 <?php
     include '../admin/include/header.php';
     include '../admin/include/navigation.php';
-    include '../classes/customer.php';
+    include '../controller/CustomerController.php';
     // include '../classes/category.php';
-    $customer = new Customer(); //gọi tên class
+    $customer = new CustomerController(); //gọi tên class
 ?>
 <?php
     if(isset($_GET['customer_id'])){
@@ -47,7 +47,7 @@
         $email = $_POST['email'];
         $dia_chi = $_POST['dia_chi'];
         // $mat_khau = $_POST['mat_khau'];
-        $update_customer = $customer -> update_customer($id,$tmp,$anh_khach_hang,$ten_khach_hang,$tuoi,$sdt,$email,$dia_chi);
+        $updateCustomer = $customer->updateCustomer($id,$tmp,$anh_khach_hang,$ten_khach_hang,$tuoi,$sdt,$email,$dia_chi);
 
     }else{
         // echo "F";
@@ -64,13 +64,13 @@
                         <div class="card-body">
                             <h4 class="card-title">Sửa sản phẩm</h4>
                             <?php
-                                if(isset($update_customer)){
-                                    echo "<span>".$update_customer."</span>";
+                                if(isset($updateCustomer)){
+                                    echo "<span>".$updateCustomer."</span>";
                                 }
                             ?>
                             <?php
-                                $show_customer_by_id = $customer->get_customer_by_id($id);
-                                while($row = $show_customer_by_id->fetch_assoc()){
+                                $getCustomerId = $customer->getCustomerId($id);
+                                while($row = $getCustomerId->fetch_assoc()){
                             ?>
                             <div class="form-group row" style="margin-top:10px;">
                                 <label for="lname" class="col-sm-3 text-right control-label col-form-label">Hình ảnh</label>

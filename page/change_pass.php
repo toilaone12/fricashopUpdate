@@ -48,7 +48,7 @@
     spl_autoload_register(function($callName){
         include_once "../classes/".$callName.'.php';
     });
-    $customer = new Customer();
+    $customer = new CustomerController();
     if(isset($_GET['email'])){
         $email = $_GET['email'];
     }
@@ -56,7 +56,7 @@
         $ten_dang_nhap = $_POST['ten_dang_nhap'];
         $mat_khau = md5($_POST['mat_khau']);
         $nhap_lai_mat_khau = md5($_POST['nhap_lai_mat_khau']);
-        $change_pass = $customer->change_password($ten_dang_nhap,$mat_khau,$nhap_lai_mat_khau,$_POST);
+        $change_pass = $customer->changePassword($ten_dang_nhap,$mat_khau,$nhap_lai_mat_khau,$_POST);
     }
 ?>
 <section class="vh-100" style="padding-top:100px">
@@ -102,7 +102,7 @@
             </div>
             <div class="text-center text-lg-start mt-4 pt-2">
                 <input type="submit" class="btn btn-primary btn-lg"
-                style="padding-left: 2.5rem; padding-right: 2.5rem;" name="thay_doi_mk" value="Change Password">
+                style="padding-left: 2.5rem; padding-right: 2.5rem;" name="thay_doi_mk" value="Đổi mật khẩu">
             </div>
 
             </form>

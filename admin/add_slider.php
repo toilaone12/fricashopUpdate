@@ -32,8 +32,8 @@
             include '../admin/include/navigation.php';
         ?>
         <?php
-            include '../classes/slider.php';
-            $slider = new Slider(); //gọi tên class
+            include '../controller/SliderController.php';
+            $slider = new SliderController(); //gọi tên class
             if(isset($_POST['them_quang_cao'])){
                 if(isset($_FILES['anh_quang_cao']['name'])){
                     $anh_quang_cao = $_FILES['anh_quang_cao']['name'];
@@ -42,7 +42,7 @@
                      echo "Lỗi";
                 }
                 $ten_quang_cao = $_POST['ten_quang_cao'];
-                $add_slider = $slider->insert_slider($anh_quang_cao_tmp,$anh_quang_cao,$ten_quang_cao); // tham chiếu đến hàm trong lớp được gọi
+                $insertSlider = $slider->insertSlider($anh_quang_cao_tmp,$anh_quang_cao,$ten_quang_cao); // tham chiếu đến hàm trong lớp được gọi
             }else{
                 // echo "F"; 
             }
@@ -58,8 +58,8 @@
                                 <div class="card-body">
                                     <h4 class="card-title">Thêm quảng cáo</h4>
                                     <?php
-                                        if(isset($add_slider)){
-                                            echo "<span>".$add_slider."</span>";
+                                        if(isset($insertSlider)){
+                                            echo "<span>".$insertSlider."</span>";
                                         }
                                     ?>
                                     <div class="form-group row" >

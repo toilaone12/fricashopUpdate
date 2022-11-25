@@ -28,8 +28,8 @@
 <?php
     include '../admin/include/header.php';
     include '../admin/include/navigation.php';
-    include '../classes/slider.php';
-    $slider = new Slider(); //gọi tên class
+    include '../controller/SliderController.php';
+    $slider = new SliderController(); //gọi tên class
 ?>
 <?php
     if(isset($_GET['id'])){
@@ -41,7 +41,7 @@
         $tmp = $_FILES['anh_quang_cao']['tmp_name'];
         $anh_quang_cao = $_FILES['anh_quang_cao']['name'];
         $ten_quang_cao = $_POST['ten_quang_cao'];
-        $update_slider = $slider->update_slider($id,$tmp,$anh_quang_cao,$ten_quang_cao);
+        $updateSlider = $slider->updateSlider($id,$tmp,$anh_quang_cao,$ten_quang_cao);
     }else{
         echo "F";
     }
@@ -57,18 +57,18 @@
                         <div class="card-body">
                             <h4 class="card-title">Sửa quảng cáo</h4>
                             <?php
-                                if(isset($update_slider)){
-                                    echo "<span>".$update_slider."</span>";
+                                if(isset($updateSlider)){
+                                    echo "<span>".$updateSlider."</span>";
                                 }
                             ?>
                             <?php
-                                $get_id_slider = $slider->get_id_slider($id);
-                                $row = $get_id_slider->fetch_assoc();
+                                $getSliderId = $slider->getSliderId($id);
+                                $row = $getSliderId->fetch_assoc();
                             ?>
                             <div class="form-group row" style="margin-top:10px;">
                                 <label for="lname" class="col-sm-3 text-right control-label col-form-label">Hình ảnh quảng cáo</label>
                                 <div class="col-sm-9" style="display:flex; margin-top:10px">
-                                    <img type="image" style="margin-right: 10px; width:30px; height:30px;" class="" src="<?php echo $row['image_slider'];?>">  
+                                    <img type="image" style="margin-right: 10px; width:30px; height:30px;" class="" src="./img/<?php echo $row['image_slider'];?>">  
                                     <input type="file" name="anh_quang_cao" id="" value="<?php echo $row['image'];?>">
                                 </div>
                             </div>

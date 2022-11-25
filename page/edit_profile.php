@@ -45,10 +45,10 @@
 
     Session::init();
 
-    spl_autoload_register(function($callName){
-        include_once "../classes/".$callName.'.php';
-    });
-    $customer = new Customer();
+    // spl_autoload_register(function($callName){
+    //     include_once "../controller/".$callName.'.php';
+    // });
+    $customer = new CustomerController();
     if(Session::get("ten_dang_nhap") == false){
         header("Location: login.php");
     }
@@ -125,7 +125,7 @@ body{
 </style>
 <?php
     $id = Session::get("id");
-    $get_customer = $customer->show_customer($id);
+    $get_customer = $customer->showCustomer($id);
     if(isset($_POST['save'])){
         $hinh_anh = $_FILES['hinh_anh']['name'];
         $tmp = $_FILES['hinh_anh']['tmp_name'];
@@ -134,7 +134,7 @@ body{
         $dia_chi = $_POST['dia_chi'];
         $email = $_POST['email'];
         $sdt = $_POST['sdt'];
-        $edit_customer = $customer->edit_customer($id,$tmp,$hinh_anh,$ten_khach_hang,$tuoi,$sdt,$email,$dia_chi);
+        $edit_customer = $customer->changeCustomer($id,$tmp,$hinh_anh,$ten_khach_hang,$tuoi,$sdt,$email,$dia_chi);
     }
     if($get_customer){
         while($row = $get_customer->fetch_assoc()){

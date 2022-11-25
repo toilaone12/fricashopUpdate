@@ -25,12 +25,12 @@
     <script src="js/modernizr-3.5.0.min.js"></script>
 </head>
 <?php
-    include_once "../classes/news.php";
-    $new = new News();
+    include '../controller/NewsController.php';
+    $newsController = new NewsController(); //gọi tên class
     if(isset($_GET['news'])){
         $id = $_GET['news'];
-        $get_news_id = $new->get_list_news_by_id($id);
-        $row = $get_news_id->fetch_assoc(); 
+        $getNewsId = $newsController->getNewsId($id);
+        $row = $getNewsId->fetch_assoc(); 
         // echo ;
     }
 ?>

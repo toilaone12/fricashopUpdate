@@ -222,24 +222,24 @@ input[type="file"]{
 <?php
     include_once './include/header.php';
     spl_autoload_register(function($className){
-        include_once '../classes/'.$className.'.php';
+        include_once '../controller/'.$className.'.php';
     });
-    $cart = new Cart();
-    $product = new Product();
-    $cs = new Customer();
+    $cart = new BillController();
+    $product = new ProductController();
+    $cs = new CustomerController();
     if(isset($_GET['product_id'])){
         $product_id = $_GET['product_id'];
     }
-    $select_product_by_id = $product->get_id_product($product_id);
+    $select_product_by_id = $product->getProductId($product_id);
     if(isset($_POST['mua_ngay'])){
         $quantity = $_POST['so_luong'];
-        $add_to_cart = $cart -> add_to_cart($product_id,$quantity);
+        $add_to_cart = $cart -> addCart($product_id,$quantity);
     }
     if(isset($_POST['send_comment'])){
         $id = $_POST['p_id'];
         $name_comment = $_POST['name_comment'];
         $desc_comment = $_POST['desc_comment'];
-        $add_comment = $cs->insert_comment($id,$name_comment,$desc_comment);
+        $add_comment = $cs->comment($id,$name_comment,$desc_comment);
     }
 ?>
 <div class="container">
@@ -253,7 +253,7 @@ input[type="file"]{
                 <h5 class="card-subtitle">Danh mục: <?php echo $row_product_id['name'];?></h5>
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-6">
-                        <div class="white-box text-center"><img style="margin-top: 50px;" src="<?php echo $row_product_id['image_pr']?>" class="img-responsive"></div>
+                        <div class="white-box text-center"><img style="margin-top: 50px;" src="../admin/img/<?php echo $row_product_id['image_pr']?>" class="img-responsive"></div>
                     </div>
                     <div class="col-lg-7 col-md-7 col-sm-6">
                         <h4 class="box-title mt-5">Thông tin về khóa học</h4>
@@ -291,7 +291,6 @@ input[type="file"]{
                     </div>
                 </div>
             </div>
-            <object style="width: 80%; position: relative; left: 10%; margin-bottom: 50px;" height="350" data="http://www.youtube.com/v/<?php echo $row_product_id['link_ytb'];?>" type="application/x-shockwave-flash"><param name="src" value="http://www.youtube.com/v/<?php echo $row_product_id['link_ytb'];?>"></object>
         </form>
     </div>
     <?php
@@ -306,13 +305,6 @@ input[type="file"]{
                 <div class="comment-box ml-2">
                     
                     <h4>Đánh giá sản phẩm</h4>                         
-                    <!-- <div class="rating"> 
-                        <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
-                        <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label> 
-                        <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
-                        <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
-                        <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
-                    </div> -->
                     <form action="" method="POST">
                         <div class="comment-area">
                             <input type="hidden" name="p_id" value="<?php echo $product_id?>">
@@ -357,7 +349,7 @@ input[type="file"]{
 
     </div>
     <?php
-        $select_comment = $cs->select_comment($product_id);
+        $listComment = $cs->listComment($product_id);
     ?>
     <div class="row">
         <div class="col-sm-10 col-sm-offset-1" id="logout">
@@ -370,13 +362,13 @@ input[type="file"]{
                         <ul class="media-list">
                         <li class="media" style="display: block !important;">
                             <?php
-                                if(!isset($select_comment)){
-                                    // echo $select_comment;
+                                if(!isset($listComment)){
+                                    // echo $listComment;
                             ?>
                             <span>Không có bình luận!</span>
                             <?php
                                 }else{
-                                    while($row = $select_comment->fetch_assoc()){
+                                    while($row = $listComment->fetch_assoc()){
                             ?>
                             <div class="media-body">
                                 <div class="well well-lg">

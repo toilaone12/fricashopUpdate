@@ -4,6 +4,13 @@
     require "../PHPMailer-master/src/PHPMailer.php"; 
     require "../PHPMailer-master/src/SMTP.php"; 
     require "../PHPMailer-master/src/Exception.php"; 
+    include_once "../lib/session.php";
+    if(empty(session_id()) && !headers_sent()){
+        // include_once "../lib/session.php";
+        Session::init();
+    }else{
+        // session_start();
+    }
     class Customer{
         private $db;
         private $fm;
@@ -14,63 +21,69 @@
             $this->fm = new Format();
         }
 
-        public function get_list_customer(){
-            $query = "SELECT * FROM customer";
+        public function get_list_customer($sotrang){
+            if($sotrang){
+                $page = ceil($sotrang * 5) - 5;
+            }else{
+                $page = 0;
+            }
+            $query = "SELECT * FROM customer ORDER BY id LIMIT $page,5";
             $result = $this->db->select($query);
-            return $result;
+            if($result->num_rows>0){
+                return $result;
+            }
         }
         public function get_customer_by_id($id){
             $query = "SELECT * FROM customer WHERE id = $id";
             $result = $this->db->select($query);
             return $result;
         }
+        public function pagination(){
+            $query = "SELECT * FROM customer";
+            $result = $this->db->select($query);
+            if($result -> num_rows > 0){
+                $count_pages = floor(($result->num_rows) / 5);
+                return $count_pages;
+            }else{
+            }
+        }
         public function update_customer($id,$tmp,$image,$name,$age,$phone_number,$email,$address){
             //check format text;
-            $id = $this->fm->validation($id);
-            $tmp = $this->fm->validation($tmp);
-            $image = $this->fm->validation($image);
-            $name = $this->fm->validation($name);
-            $age = $this->fm->validation($age);
-            $phone_number = $this->fm->validation($phone_number);
-            $email = $this->fm->validation($email);
-            $address = $this->fm->validation($address);
-            // $password = $this->fm->validation($password);
-            //connect to Database
-            $id = mysqli_real_escape_string($this->db->link,$id);
-            $tmp = mysqli_real_escape_string($this->db->link,$tmp);
-            $image = mysqli_real_escape_string($this->db->link,$image);
-            $name = mysqli_real_escape_string($this->db->link,$name);
-            $age = mysqli_real_escape_string($this->db->link,$age);
-            $phone_number = mysqli_real_escape_string($this->db->link,$phone_number);
-            $email = mysqli_real_escape_string($this->db->link,$email);
-            $address = mysqli_real_escape_string($this->db->link,$address);
             // $password = mysqli_real_escape_string($this->db->link,$password);
             //update
             if(empty($id) && empty($tmp) && empty($image) && empty($name) && empty($age) && empty($phone_number) && empty($email) && empty($address)){
                 $alert = "Không đủ thông tin cần sửa chưa đủ!";
                 return $alert;
             }else{
-                $link_anh = "http://192.168.43.42/fricashop/admin/img/";
                 $dir = "./img/";
                 if(!file_exists($dir)){
                     mkdir($dir,0755,true);
                 }
                 $dir = $dir.$image;
-                if(copy($tmp,$dir)){
-                    $file_anh = $link_anh.$image;
-                    $query = "UPDATE customer SET hinh_anh = '$file_anh', ten_khach_hang = '$name', tuoi = '$age', sdt = '$phone_number', email = '$email', diachi = '$address' WHERE id = $id";
+                if(move_uploaded_file($tmp,$dir)){
+                    $query = "UPDATE customer SET hinh_anh = '$dir', ten_khach_hang = '$name', tuoi = '$age', sdt = '$phone_number', email = '$email', diachi = '$address' WHERE id = $id";
                     // echo $query;
                     $result = $this->db->update($query);
                     if($result){
                         $alert = '<span style="color:green;">Sửa thành công khách hàng tên '.$name.'!</span>';
+                        Session::set('ten_khach_hang',$name);
                         return $alert;
                     }else{
                         $alert = '<span style="color:red";>Sửa tên khách hàng thất bại!</span>';
                         return $alert;
                     }
                 }else{
-                    $alert = "Không có hình ảnh";
-                    return $alert;
+                    $query = "UPDATE customer SET ten_khach_hang = '$name', tuoi = '$age', sdt = '$phone_number', email = '$email', diachi = '$address' WHERE id = $id";
+                    // echo $query;
+                    $result = $this->db->update($query);
+                    if($result){
+                        $alert = '<span style="color:green;">Sửa thành công khách hàng tên '.$name.'!</span>';
+                        Session::set('ten_khach_hang',$name);
+                        return $alert;
+                    }else{
+                        $alert = '<span style="color:red";>Sửa tên khách hàng thất bại!</span>';
+                        return $alert;
+                    }
                 }
             }
         }
@@ -100,15 +113,15 @@
                 $alert = "Không đủ thông tin cần sửa chưa đủ!";
                 return $alert;
             }else{
-                $link_anh = "http://192.168.43.42/fricashop/page/images/";
+                // $link_anh = "http://192.168.43.42/fricashop/page/images/";
                 $dir = "./images/";
                 if(!file_exists($dir)){
                     mkdir($dir,0755,true);
                 }
                 $dir = $dir.$image;
                 if(copy($tmp,$dir)){
-                    $file_anh = $link_anh.$image;
-                    $query = "UPDATE customer SET hinh_anh = '$file_anh', ten_khach_hang = '$name', tuoi = '$age', sdt = '$phone_number', email = '$email', diachi = '$address' WHERE id = $id";
+                    // $file_anh = $link_anh.$image;
+                    $query = "UPDATE customer SET hinh_anh = '$dir', ten_khach_hang = '$name', tuoi = '$age', sdt = '$phone_number', email = '$email', diachi = '$address' WHERE id = $id";
                     // echo $query;
                     $result = $this->db->update($query);
                     if($result){
@@ -161,7 +174,7 @@
         }
         public function register($ten_dang_nhap,$ten_khach_hang,$mat_khau,$tuoi,$sdt,$dia_chi,$data){
             $regex_pass = '/^[A-Z]{1}[a-zA-Z0-9]{6,32}$/';
-            $link_anh = "http://192.168.43.42/FricaShop/admin/img/white_background.jpeg";
+            $link_anh = "../admin/img/white_background.jpeg";
             $ten_dang_nhap = $this->fm->validation($ten_dang_nhap);
             $ten_khach_hang = $this->fm->validation($ten_khach_hang);
             $mat_khau = $this->fm->validation($mat_khau);
@@ -191,7 +204,7 @@
                         $query = "INSERT INTO customer VALUES (NULL,'$link_anh','$ten_khach_hang',$tuoi,'$sdt','$ten_dang_nhap','$dia_chi','$mat_khau')";
                         $result = $this->db->insert($query);
                         if($result){
-                            header("Location: login.php");
+                            return "<script>location.href='login.php'</script>";
                         }else{
                             return "Đăng ký không thành công!";
                         }
@@ -218,8 +231,10 @@
                         // echo $query;
                         $result = $this->db->update($query);
                         if($result){
-                            return '<script>alert("Thay đổi mật khẩu thành công!")</script>';
-                            return '<script>window.location.href="login.php"</script>';
+                            return '<script>
+                                        alert("Thay đổi mật khẩu thành công!");
+                                        location.href="login.php";
+                                    </script>';
                         }else{
                             return '<span style="color:red;">Thay đổi mật khẩu thất bại!</span>';
                         } 
@@ -230,8 +245,8 @@
             }
         }
         public function forgot_password($email){
-            $email = $this->fm->validation($email);
-            $email = mysqli_real_escape_string($this->db->link,$email);
+            // $email = $this->fm->validation($email);
+            // $email = mysqli_real_escape_string($this->db->link,$email);
             if($email == ''){
                 return '<span style="color:red;">Không được để trống Email!</span>';
             }else{
@@ -241,43 +256,45 @@
                     if($result->num_rows == 0){
                         return '<span style="color:red;">Email chưa được đăng ký, vui lòng kiểm tra lại!</span>';
                     }else{
+                        return "<script>location.href='change_pass.php?email={$email}'</script>";
                         // guiMail($email);
                         
-                        $mail = new PHPMailer\PHPMailer\PHPMailer(true);//true:enables exceptions
-                        try {
-                            $mail->SMTPDebug = 0; //0,1,2: chế độ debug. khi chạy ngon thì chỉnh lại 0 nhé
-                            $mail->isSMTP();  
-                            $mail->CharSet  = "utf-8";
-                            $mail->Host = 'smtp.gmail.com';  //SMTP servers
-                            $mail->SMTPAuth = true; // Enable authentication
-                            $mail->Username = 'toilaone12@gmail.com'; // SMTP username
-                            $mail->Password = 'kieudangbaoson';   // SMTP password
-                            $mail->SMTPSecure = 'tls';  // encryption TLS/SSL 
-                            $mail->Port = 587;  // port to connect to                
-                            $mail->setFrom('toilaone12@gmail.com','Son'); 
-                            $mail->addAddress($email); //mail và tên người nhận  
-                            $mail->isHTML(true);  // Set email format to HTML
-                            $mail->Subject = "Yêu cầu thay đổi mật khẩu của bạn {$email}";
-                            $noidungthu = "<p>Thư được gửi đến từ trang FricaShop.com, do có bạn hoặc ai đó yêu cầu thay đổi mật khẩu mới
-                            <a href='http://localhost/fricashop/page/change_pass.php?email={$email}'>Click vào đây để thay đổi mật khẩu</a>
-                            </p>"; ; 
-                            $mail->Body = $noidungthu;
-                            $mail->smtpConnect( array(
-                                "ssl" => array(
-                                    "verify_peer" => false,
-                                    "verify_peer_name" => false,
-                                    "allow_self_signed" => true
-                                )
-                            ));
-                            $mail->send();
-                            return '<span style="color:green;">Gửi email thành công, vui lòng kiểm tra email!</span>';
-                            return "<meta http-equiv=\"refresh\" content=\"0\">";
-                            // $thongbaomail = "Đã gửi thông tin!";
-                        } catch (Exception $e) {
-                            // $thongbaomail = "Lỗi";
-                            return '<span style="color: red;">Gửi email thất bại, vui lòng kiểm tra email! '.$mail->ErrorInfo.'</span>';
-                            // return $mail->ErrorInfo;
-                        }
+                        // $mail = new PHPMailer\PHPMailer\PHPMailer(true);//true:enables exceptions
+                        // try {
+                        //     $mail->SMTPDebug = 0; //0,1,2: chế độ debug. khi chạy ngon thì chỉnh lại 0 nhé
+                        //     $mail->isSMTP();  
+                        //     $mail->CharSet  = "utf-8";
+                        //     $mail->Host = 'smtp.gmail.com';  //SMTP servers
+                        //     $mail->SMTPAuth = true; // Enable authentication
+                        //     $mail->Username = 'toilaone12@gmail.com'; // SMTP username
+                        //     $mail->Password = 'kieudangbaoson';   // SMTP password
+                        //     $mail->SMTPSecure = 'tls';  // encryption TLS/SSL 
+                        //     $mail->Port = 587;  // port to connect to                
+                        //     $mail->setFrom('toilaone12@gmail.com','Son'); 
+                        //     $mail->addAddress($email); //mail và tên người nhận  
+                        //     $mail->isHTML(true);  // Set email format to HTML
+                        //     $mail->Subject = "Yêu cầu thay đổi mật khẩu của bạn {$email}";
+                        //     $noidungthu = "<p>Thư được gửi đến từ trang FricaShop.com, do có bạn hoặc ai đó yêu cầu thay đổi mật khẩu mới
+                        //     <a href='http://localhost/fricashop/page/change_pass.php?email={$email}'>Click vào đây để thay đổi mật khẩu</a>
+                        //     </p>"; ; 
+                        //     $mail->Body = $noidungthu;
+                        //     $mail->smtpConnect( array(
+                        //         "ssl" => array(
+                        //             "verify_peer" => false,
+                        //             "verify_peer_name" => false,
+                        //             "allow_self_signed" => true
+                        //         )
+                        //     ));
+                        //     $mail->send();
+                        //     return '<span style="color:green;">Gửi email thành công, vui lòng kiểm tra email!</span>';
+                        //     return "<meta http-equiv=\"refresh\" content=\"0\">";
+                        //     // $thongbaomail = "Đã gửi thông tin!";
+                        // } catch (Exception $e) {
+                        //     // $thongbaomail = "Lỗi";
+                        //     // return '<span style="color: red;">Gửi email thất bại, vui lòng kiểm tra email! '.$mail->ErrorInfo.'</span>';
+                        //     echo $e;
+                        // }
+                        
                         
                     }
                 // }else{

@@ -30,25 +30,25 @@
         <?php
             include '../admin/include/header.php';
             include '../admin/include/navigation.php';
-            include '../classes/news.php';
-            $news = new News(); //gọi tên class
+            include '../controller/NewsController.php';
+            $newsController = new NewsController(); //gọi tên class
         ?>
         <?php
             if(isset($_GET['id'])){
                 $id = $_GET['id'];
-                $delete_news = $news -> delete_news($id);
-                if($delete_news){
-                    echo $delete_news;
+                $deleteNews = $newsController->deleteNews($id);
+                if($deleteNews){
+                    echo $deleteNews;
                 }
             }
         ?>
         <?php
-            // $number = $cate->select_number_list();
-            // if(isset($_GET['sotrang'])){
-            //     $sotrang = $_GET['sotrang'];
-            // }else{
-            //     $sotrang = "";
-            // }
+            $pagination = $newsController->pagination();
+            if(isset($_GET['sotrang'])){
+                $sotrang = $_GET['sotrang'];
+            }else{
+                $sotrang = "";
+            }
         ?>
     <div class="content">
         <div class="value">
@@ -72,10 +72,10 @@
                                     </thead>
                                     <tbody>
                                         <?php
-                                            $show_news = $news->get_list_news();
-                                            if($show_news){
+                                            $listNews = $newsController->listNews($sotrang);
+                                            if($listNews){
                                                 $i = 0;
-                                                while($value = $show_news->fetch_assoc()){
+                                                while($value = $listNews->fetch_assoc()){
                                                 $i++;
                                         ?>
                                         <tr align="center">
@@ -95,8 +95,22 @@
                                         }
                                         ?>
                                     </tbody>
-                        
+                                        
                                 </table>
+                                <nav aria-label="..." >
+                                    <ul class="pagination pagination-sm" style="justify-content: center; margin-top:20px">
+                                        <?php
+                                            for($j = 1; $j <= $pagination; $j++){
+                                        ?>
+                                        <li class="page-item <?php echo ($j == $sotrang) ?  "disabled" : "" ?>">
+                                            <a class="page-link" href="?sotrang=<?php echo $j?>" tabindex="-1"><?php echo $j;?></a>
+                                        </li>
+                                        <?php
+                                            }
+                                        ?>
+                                    </ul>
+                                    
+                                </nav>
                             </form>
                         </div>
 

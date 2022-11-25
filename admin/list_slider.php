@@ -30,16 +30,22 @@
         <?php
             include '../admin/include/header.php';
             include '../admin/include/navigation.php';
-            include '../classes/slider.php';
-            $slider = new Slider(); //gọi tên class
+            include '../controller/SliderController.php';
+            $slider = new SliderController(); //gọi tên class
         ?>
         <?php
             if(isset($_GET['id'])){
                 $id = $_GET['id'];
-                $delete_slider = $slider -> delete_slider($id);
-                if($delete_slider){
-                    echo $delete_slider;
+                $deleteSilder = $slider->deleteSlider($id);
+                if($deleteSilder){
+                    echo $deleteSilder;
                 }
+            }
+            $pagination = $slider->pagination();
+            if(isset($_GET['sotrang'])){
+                $sotrang = $_GET['sotrang'];
+            }else{
+                $sotrang = "";
             }
         ?>
     <div class="content">
@@ -61,15 +67,15 @@
                                     </thead>
                                     <tbody>
                                         <?php
-                                            $show_slider = $slider->get_slider();
-                                            if($show_slider){
+                                            $listSlider = $slider->listSlider($sotrang);
+                                            if($listSlider){
                                                 $i = 0;
-                                                while($value = $show_slider->fetch_assoc()){
+                                                while($value = $listSlider->fetch_assoc()){
                                                 $i++;
                                         ?>
                                         <tr align="center">
                                             <td width="50"><?php echo $i;?></td>
-                                            <td><img style="width: 100px; height: 100px;" src="<?php echo $value['image_slider']?>" alt=""></td>
+                                            <td><img style="width: 100px; height: 100px;" src="./img/<?php echo $value['image_slider']?>" alt=""></td>
                                             <td width="200"><?php echo $value['name_slider'];?></td>
                                             <td>
                                                 <a style="text-decoration: none; margin-right: 70px" class="btn btn-success" href="edit_slider.php?id=<?php echo $value['id_slider'];?>">Sửa</a>
@@ -83,6 +89,20 @@
                                     </tbody>
                         
                                 </table>
+                                <nav aria-label="..." >
+                                    <ul class="pagination pagination-sm" style="justify-content: center; margin-top:20px">
+                                        <?php
+                                            for($j = 1; $j <= $pagination; $j++){
+                                        ?>
+                                        <li class="page-item <?php echo ($j == $sotrang) ?  "disabled" : "" ?>">
+                                            <a class="page-link" href="?sotrang=<?php echo $j?>" tabindex="-1"><?php echo $j;?></a>
+                                        </li>
+                                        <?php
+                                            }
+                                        ?>
+                                    </ul>
+                                    
+                                </nav>
                             </form>
                         </div>
 

@@ -47,21 +47,21 @@
     
 ?>
 <?php
-    $cart = new Cart();
+    $cart = new BillController();
     if(isset($_GET['cong']) && isset($_GET['ten_sp'])){
         $cong = $_GET['cong'];
         $ten_sp = $_GET['ten_sp'];
-        $plus_cart = $cart->plus_cart($ten_sp,$cong);
+        $plus_cart = $cart->plusCart($ten_sp,$cong);
     }else if(isset($_GET['tru']) && isset($_GET['ten_sp'])){
         $tru = $_GET['tru'];
         $ten_sp = $_GET['ten_sp'];
-        $minus_cart = $cart->minus_cart($ten_sp,$tru);
+        $minus_cart = $cart->minusCart($ten_sp,$tru);
     }else if(isset($_GET['xoa'])){
         $id = $_GET['xoa'];
-        $delete_cart = $cart->delete_cart($id);
+        $delete_cart = $cart->deleteCart($id);
     }else if(isset($_GET['xoatatca']) && $_GET['xoatatca'] == 1){
         // $xoatatca = $_GET['xoatatca'];
-        $delete_all_cart = $cart->delete_all_cart();
+        $delete_all_cart = $cart->deleteAll();
     }
 ?>
 <style>
@@ -109,7 +109,7 @@
 </style>
 <table class="table table-bordered">
     <?php   
-        $select_cart = $cart -> get_cart();
+        $select_cart = $cart -> listCart();
         if($select_cart->num_rows > 0){
             $i = 0;
             $tongtien = 0;
@@ -137,7 +137,7 @@
         ?>
         <tr align="center" class="size-16">
         <th scope="row"><?php echo $i;?></th>
-        <td><img width="200" height="100" src="<?php echo $row_cart['image'];?>" alt=""></td>
+        <td><img width="200" height="100" src="../admin/img/<?php echo $row_cart['image'];?>" alt=""></td>
         <td><?php echo $row_cart["name_cart"];?></td>
         <td style="display: flex; align-items: center; justify-content:center;">
             <a style="text-decoration: none; color: #000; font-size: 20px; padding-right: 5px;" href="?cong=<?php echo $row_cart['quantity_cart'];?>&ten_sp=<?php echo $row_cart['name_cart'];?>"><i class="far fa-plus-square"></i></a>  

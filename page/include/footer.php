@@ -1,8 +1,8 @@
 <?php
-    $contact = new Contact();
-    $select_contact = $contact->get_contact();
-    $cate = new Category();
-    $select_cate = $cate->get_all_cate();
+    $contact = new ContactController();
+    $select_contact = $contact->contact();
+    $cate = new CategoryController();
+    $select_cate = $cate->listCatePage();
 ?>
 <div class="footer_section layout_padding margin_top_90">
     <div class="container">

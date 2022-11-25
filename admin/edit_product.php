@@ -28,9 +28,8 @@
 <?php
     include '../admin/include/header.php';
     include '../admin/include/navigation.php';
-    include '../classes/product.php';
-    // include '../classes/category.php';
-    $product = new Product(); //gọi tên class
+    include '../controller/ProductController.php';
+    $productController = new ProductController(); //gọi tên class
 ?>
 <?php
     if(isset($_GET['product_id'])){
@@ -47,7 +46,7 @@
         $gia_san_pham = $_POST['gia_san_pham'];
         $link_san_pham = $_POST['link_san_pham'];
         $mo_ta = $_POST['mo_ta'];
-        $update_product = $product -> update_product($id,$tmp,$anh_san_pham,$danh_muc_san_pham,$ten_san_pham,$so_luong,$gia_san_pham,$link_san_pham,$mo_ta);
+        $updateProduct = $productController->updateProduct($id,$tmp,$anh_san_pham,$danh_muc_san_pham,$ten_san_pham,$so_luong,$gia_san_pham,$link_san_pham,$mo_ta);
 
     }else{
         // echo "F";
@@ -64,18 +63,18 @@
                         <div class="card-body">
                             <h4 class="card-title">Sửa sản phẩm</h4>
                             <?php
-                                if(isset($update_product)){
-                                    echo "<span>".$update_product."</span>";
+                                if(isset($updateProduct)){
+                                    echo "<span>".$updateProduct."</span>";
                                 }
                             ?>
                             <?php
-                                $show_product_by_id_product = $product->get_id_product($id);
-                                $row = $show_product_by_id_product->fetch_assoc();
+                                $show = $productController->getProductId($id);
+                                $row = $show->fetch_assoc();
                             ?>
                             <div class="form-group row" style="margin-top:10px;">
                                 <label for="lname" class="col-sm-3 text-right control-label col-form-label">Hình ảnh danh mục</label>
                                 <div class="col-sm-9" style="display:flex; margin-top:10px">
-                                    <img type="image" style="margin-right: 10px; width:30px; height:30px;" class="" src="<?php echo $row['image_pr'];?>">  
+                                    <img type="image" style="margin-right: 10px; width:30px; height:30px;" class="" src="./img/<?php echo $row['image_pr'];?>">  
                                     <input type="file" name="anh_san_pham" id="" value="<?php echo $row['image_pr'];?>">
                                 </div>
                             </div>
@@ -84,8 +83,8 @@
                                 <div class="col-sm-9">
                                     <select name="danh_muc_san_pham" class="form-control" id="">
                                         <?php
-                                            $select_cate = $product -> get_category();
-                                            while($row_cate = $select_cate -> fetch_assoc()){
+                                            $listCategory = $productController->listCategory();
+                                            while($row_cate = $listCategory->fetch_assoc()){
                                         ?>
                                         <option
                                         <?php if($row['cate_id'] == $row_cate['cate_id']){

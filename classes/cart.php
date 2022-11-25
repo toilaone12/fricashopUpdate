@@ -57,14 +57,27 @@
                 echo "0";
             }
         }
-
+        public function pagination(){
+            $query = "SELECT * FROM detail_cart";
+            $result = $this->db->select($query);
+            if($result -> num_rows > 0){
+                $count_pages = floor(($result->num_rows) / 10);
+                return $count_pages;
+            }else{
+            }
+        }
         public function get_cart(){
             $query = 'SELECT * FROM cart c, product p WHERE c.product_id = p.product_id';
             $result = $this->db->select($query);
             return $result;
         }
-        public function get_person_payment(){
-            $query = "SELECT * FROM payment";
+        public function get_person_payment($sotrang){
+            if($sotrang){
+                $page = ceil($sotrang * 10) - 10;
+            }else{
+                $page = 0;
+            }
+            $query = "SELECT * FROM payment ORDER BY payment_id LIMIT $page,10";
             $result = $this->db->select($query);
             return $result;
         }

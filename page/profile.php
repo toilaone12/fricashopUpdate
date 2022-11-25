@@ -45,10 +45,10 @@
 
     // Session::init();
 
-    spl_autoload_register(function($callName){
-        include_once "../classes/".$callName.'.php';
-    });
-    $customer = new Customer();
+    // spl_autoload_register(function($callName){
+    //     include_once "../classes/".$callName.'.php';
+    // });
+    $customer = new CustomerController();
     if(Session::get("ten_dang_nhap") == false){
         echo '<script>window.location.href="login.php"</script>';
     }
@@ -121,7 +121,7 @@
         <!-- /Breadcrumb -->
         <?php
             $id = Session::get("id");
-            $get_customer = $customer->show_customer($id);
+            $get_customer = $customer->showCustomer($id);
             if($get_customer){
                 while($row = $get_customer->fetch_assoc()){
         ?>

@@ -32,8 +32,8 @@
             include '../admin/include/navigation.php';
         ?>
         <?php
-            include '../classes/product.php';
-            $product = new Product(); //gọi tên class
+            include '../controller/ProductController.php';
+            $productController = new ProductController(); //gọi tên class
             if(isset($_POST['themsanpham'])){
                 if(isset($_FILES['anh_san_pham']['name'])){
                     $anh_san_pham = $_FILES['anh_san_pham']['name'];
@@ -48,7 +48,7 @@
                 $link_san_pham = $_POST['link_san_pham'];
                 $mo_ta = $_POST['mo_ta'];
                 // echo "link_san_pham: ".$link_san_pham."mo_ta: ".$mo_ta;
-                $add_product = $product->insert_product($anh_san_pham_tmp,$anh_san_pham,$danh_muc,$ten_san_pham,$so_luong,$gia_san_pham,$link_san_pham,$mo_ta); // tham chiếu đến hàm trong lớp được gọi
+                $insertProduct = $productController->insertProduct($anh_san_pham_tmp,$anh_san_pham,$danh_muc,$ten_san_pham,$so_luong,$gia_san_pham,$link_san_pham,$mo_ta); // tham chiếu đến hàm trong lớp được gọi
                 // echo $add_product;
             }else{
                 // echo "F"; 
@@ -63,25 +63,25 @@
                         <div class="card">
                             <form class="form-horizontal" action="add_product.php" method="POST" enctype="multipart/form-data">
                                 <div class="card-body">
-                                    <h4 class="card-title">Thêm khóa học</h4>
+                                    <h4 class="card-title">Thêm sản phẩm</h4>
                                     <?php
-                                        if(isset($add_product)){
-                                            echo "<span>".$add_product."</span>";
+                                        if(isset($insertProduct)){
+                                            echo "<span>".$insertProduct."</span>";
                                         }
                                     ?>
                                     <div class="form-group row" >
-                                        <label for="lname" class="col-sm-3 text-right control-label col-form-label">Hình ảnh khóa học</label>
+                                        <label for="lname" class="col-sm-3 text-right control-label col-form-label">Hình ảnh sản phẩm</label>
                                         <div class="col-sm-9" style="margin-top:15px;">
                                             <input type="file" name="anh_san_pham" id="">
                                         </div>
                                     </div>
                                     <div class="form-group row" style="margin-top:10px;">
-                                        <label for="lname" class="col-sm-3 text-right control-label col-form-label">Danh mục khóa học</label>
+                                        <label for="lname" class="col-sm-3 text-right control-label col-form-label">Danh mục sản phẩm</label>
                                         <div class="col-sm-9">
                                             <select name="danh_muc" class="form-control" style="margin-top: 10px;" id="">
                                                 <?php
-                                                    $show_cate = $product->get_category();
-                                                    while($row_cate = $show_cate->fetch_assoc()){
+                                                    $listCategory = $productController->listCategory();
+                                                    while($row_cate = $listCategory->fetch_assoc()){
                                                 ?>
                                                 <option value="<?php echo $row_cate['cate_id']?>"><?php echo $row_cate['name'];?></option>
                                                 <?php
@@ -91,39 +91,39 @@
                                         </div>
                                     </div>
                                     <div class="form-group row" style="margin-top:10px;">
-                                        <label for="lname" class="col-sm-3 text-right control-label col-form-label">Tên khóa học</label>
+                                        <label for="lname" class="col-sm-3 text-right control-label col-form-label">Tên sản phẩm</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="fname" name="ten_san_pham" placeholder="Tên khóa học" >
+                                            <input type="text" class="form-control" id="fname" name="ten_san_pham" placeholder="Tên sản phẩm" >
                                         </div>
                                     </div>
                                     <div class="form-group row" >
-                                        <label for="lname" class="col-sm-3 text-right control-label col-form-label">Số lượng khóa học</label>
+                                        <label for="lname" class="col-sm-3 text-right control-label col-form-label">Số lượng sản phẩm</label>
                                         <div class="col-sm-9" style="margin-top:10px;">
-                                            <input type="number" min=1 class="form-control" id="fname" name="so_luong" placeholder="Số lượng khóa học" >
+                                            <input type="number" min=1 class="form-control" id="fname" name="so_luong" placeholder="Số lượng sản phẩm" >
                                         </div>
                                     </div>
                                     <div class="form-group row" style="margin-top:10px;">
-                                        <label for="lname" class="col-sm-3 text-right control-label col-form-label">Giá khóa học</label>
+                                        <label for="lname" class="col-sm-3 text-right control-label col-form-label">Giá sản phẩm</label>
                                         <div class="col-sm-9">
-                                            <input type="number" min=1 class="form-control" id="fname" name="gia_san_pham" placeholder="Giá khóa học" >
+                                            <input type="number" min=1 class="form-control" id="fname" name="gia_san_pham" placeholder="Giá sản phẩm" >
                                         </div>
                                     </div>
                                     <div class="form-group row" >
-                                        <label for="lname" class="col-sm-3 text-right control-label col-form-label">Link giới thiệu khóa học</label>
+                                        <label for="lname" class="col-sm-3 text-right control-label col-form-label">Link giới thiệu sản phẩm</label>
                                         <div class="col-sm-9" style="margin-top:10px;">
-                                            <input type="text" class="form-control" id="fname" name="link_san_pham" placeholder="Link giới thiệu khóa học" >
+                                            <input type="text" class="form-control" id="fname" name="link_san_pham" placeholder="Link giới thiệu sản phẩm" >
                                         </div>
                                     </div>
                                     <div class="form-group row" >
-                                        <label for="lname" class="col-sm-3 text-right control-label col-form-label">Mô tả về khóa học</label>
+                                        <label for="lname" class="col-sm-3 text-right control-label col-form-label">Mô tả về sản phẩm</label>
                                         <div class="col-sm-9" style="margin-top:10px;">
-                                            <textarea name="mo_ta" id="" cols="30" rows="5" placeholder="Mô tả về khóa học"></textarea>
+                                            <textarea name="mo_ta" id="" cols="30" rows="5" placeholder="Mô tả về sản phẩm"></textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="border-top">
                                     <div class="card-body">
-                                        <input type="submit" name="themsanpham" class="btn btn-primary" value="Thêm khóa học">
+                                        <input type="submit" name="themsanpham" class="btn btn-primary" value="Thêm sản phẩm">
                                     </div>
                                 </div>
                             </form>

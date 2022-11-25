@@ -32,8 +32,8 @@
             include '../admin/include/navigation.php';
         ?>
         <?php
-            include '../classes/news.php';
-            $new = new News(); //gọi tên class
+            include '../controller/NewsController.php';
+            $newsController = new NewsController(); //gọi tên class
             if(isset($_POST['themtintuc'])){
                 if(isset($_FILES['anh_tin_tuc']['name'])){
                     $anh_tin_tuc = $_FILES['anh_tin_tuc']['name'];
@@ -43,7 +43,7 @@
                 }
                 $ten_tin_tuc = $_POST['ten_tin_tuc'];
                 $mo_ta = $_POST['mo_ta'];
-                $add_news = $new->add_news($anh_tin_tuc_tmp,$anh_tin_tuc,$ten_tin_tuc,$mo_ta); // tham chiếu đến hàm trong lớp được gọi
+                $insertNews = $newsController->insertNews($anh_tin_tuc_tmp,$anh_tin_tuc,$ten_tin_tuc,$mo_ta); // tham chiếu đến hàm trong lớp được gọi
             }else{
                 // echo "F"; 
             }
@@ -59,8 +59,8 @@
                                 <div class="card-body">
                                     <h4 class="card-title">Thêm tin tức</h4>
                                     <?php
-                                        if(isset($add_news)){
-                                            echo "<span>".$add_news."</span>";
+                                        if(isset($insertNews)){
+                                            echo "<span>".$insertNews."</span>";
                                         }
                                     ?>
                                     <div class="form-group row" >

@@ -42,12 +42,12 @@
     include_once '../lib/database.php';
     include_once '../lib/session.php';
     spl_autoload_register(function($callName){
-        include_once '../classes/'.$callName.'.php';
+        include_once '../controller/'.$callName.'.php';
     });
     include_once './include/header.php';
 ?>
 <?php
-    $customer = new Customer();
+    $customer = new CustomerController();
     if(isset($_POST['dangky'])){
         $ten_dang_nhap = $_POST['ten_dang_nhap'];
         $ten_khach_hang = $_POST['ten_khach_hang'];
@@ -120,7 +120,7 @@
               </div>
               <div class="text-center text-lg-start mt-4 pt-2">
                 <input type="submit" class="btn btn-primary btn-lg"
-                  style="padding-left: 2.5rem; padding-right: 2.5rem;" name="dangky" value="Register">
+                  style="padding-left: 2.5rem; padding-right: 2.5rem;" name="dangky" value="Đăng ký">
                 <p class="small fw-bold mt-2 pt-1 mb-0">Bạn đã có tài khoản? <a href="login.php"
                     class="link-danger">Đăng nhập</a></p>
               </div>

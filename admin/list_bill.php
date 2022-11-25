@@ -30,11 +30,17 @@
         <?php
             include_once '../admin/include/header.php';
             include_once '../admin/include/navigation.php';
-            include_once '../classes/cart.php';
-            $cart = new Cart(); //gọi tên class
+            include_once '../controller/BillController.php';
+            $cart = new BillController(); //gọi tên class
         ?>
         <?php
-            $payment = $cart->get_person_payment();
+            if(isset($_GET['sotrang'])){
+                $sotrang = $_GET['sotrang'];
+            }else{
+                $sotrang = "";
+            }
+            $pagination = $cart->pagination();
+            $listBill = $cart->listBill($sotrang);
         ?>
     <div class="content">
         <div class="value">
@@ -59,9 +65,9 @@
                                     </thead>
                                     <tbody>
                                         <?php
-                                            if($payment){
+                                            if($listBill){
                                                 $i = 0;
-                                                while($value = $payment->fetch_assoc()){
+                                                while($value = $listBill->fetch_assoc()){
                                                 $i++;
                                         ?>
                                         <tr align="center">
@@ -83,6 +89,20 @@
                                     </tbody>
                         
                                 </table>
+                                <nav aria-label="..." >
+                                    <ul class="pagination pagination-sm" style="justify-content: center; margin-top:20px">
+                                        <?php
+                                            for($j = 1; $j <= $pagination; $j++){
+                                        ?>
+                                        <li class="page-item <?php echo ($j == $sotrang) ?  "disabled" : "" ?>">
+                                            <a class="page-link" href="?sotrang=<?php echo $j?>" tabindex="-1"><?php echo $j;?></a>
+                                        </li>
+                                        <?php
+                                            }
+                                        ?>
+                                    </ul>
+                                    
+                                </nav>
                             </form>
                         </div>
 

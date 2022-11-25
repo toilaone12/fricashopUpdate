@@ -12,15 +12,10 @@
         }
 
         public function add_news($tmp,$name,$title,$desc){
-            //kết nối với CSDL
-            // $username = mysqli_real_escape_string($this->db->link,$username); //Thoát các ký tự đặc biệt trong chuỗi truy vấn SQL
-            $title = mysqli_real_escape_string($this->db->link,$title);
-            $desc = mysqli_real_escape_string($this->db->link,$desc);
             if(empty($name) || empty($title) || empty($desc)){
                 $alert = "Tên tin tức và hình ảnh không được bỏ trống!";
                 return $alert;
             }else{
-                $link_anh = "http://192.168.43.42/FricaShop/admin/img/";
                 $dir = "./img/";
                 // echo $dir;
                 date_default_timezone_set("Asia/Ho_Chi_Minh");
@@ -31,8 +26,7 @@
                 // $name = "/".rand()."_".time().".png";
                 $dir = $dir.$name;
                 if(copy($tmp,$dir)){
-                    $file_anh = $link_anh.$name;
-                    $query = "INSERT INTO news VALUES(null,'$file_anh','$title','$desc','$date')";
+                    $query = "INSERT INTO news VALUES(null,'$dir','$title','$desc','$date')";
                     // echo $query;
                     $result = $this->db->insert($query); //$this->db là lớp Database
                     if($result){
@@ -49,11 +43,25 @@
                 
             }
         }
-        public function get_list_news(){
-            $query = "SELECT * FROM news";
+        public function get_list_news($sotrang){
+            if($sotrang){
+                $page = ceil($sotrang * 5) - 5;
+            }else{
+                $page = 0;
+            }
+            $query = "SELECT * FROM news ORDER BY id_news LIMIT $page,5";
             $result = $this->db->select($query);
             if($result->num_rows>0){
                 return $result;
+            }
+        }
+        public function pagination(){
+            $query = "SELECT * FROM news";
+            $result = $this->db->select($query);
+            if($result -> num_rows > 0){
+                $count_pages = floor(($result->num_rows) / 5);
+                return $count_pages;
+            }else{
             }
         }
         public function get_list_news_by_id($id){
@@ -79,7 +87,6 @@
                 $alert = "Tên tin tức và thông tin bài viết không được bỏ trống!";
                 return $alert;
             }else{
-                $link_anh = "http://192.168.43.42/FricaShop/admin/img/";
                 $dir = "./img/";
                 // echo $dir;
                 date_default_timezone_set("Asia/Ho_Chi_Minh");
@@ -89,9 +96,8 @@
                 }
                 // $name = "/".rand()."_".time().".png";
                 $dir = $dir.$name;
-                if(copy($tmp,$dir)){
-                    $file_anh = $link_anh.$name;
-                    $query = "UPDATE news SET title_news = '$title',desc_news = '$desc',time_news = '$date', image_news = '$file_anh' WHERE id_news = $id";
+                if(move_uploaded_file($tmp,$dir)){
+                    $query = "UPDATE news SET title_news = '$title',desc_news = '$desc',time_news = '$date', image_news = '$dir' WHERE id_news = $id";
                     // echo $query;
                     $result = $this->db->update($query); //$this->db là lớp Database
                     if($result){
@@ -102,8 +108,16 @@
                         return $alert;
                     }
                 }else{
-                    $alert = "Không thêm hình ảnh vào được!";
-                    return $alert;
+                    $query = "UPDATE news SET title_news = '$title',desc_news = '$desc',time_news = '$date' WHERE id_news = $id";
+                    // echo $query;
+                    $result = $this->db->update($query); //$this->db là lớp Database
+                    if($result){
+                        $alert = '<span style="color:green;">Sửa thành công tin tức '.$title.' vào mục tin tức!</span>';
+                        return $alert;
+                    }else{
+                        $alert = '<span style="color:red";>Sửa danh mục tin tức!</span>';
+                        return $alert;
+                    }
                 }
                 
             }

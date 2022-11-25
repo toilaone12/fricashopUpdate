@@ -28,8 +28,8 @@
 <?php
     include '../admin/include/header.php';
     include '../admin/include/navigation.php';
-    include '../classes/news.php';
-    $news = new News(); //gọi tên class
+    include '../controller/NewsController.php';
+    $newsController = new NewsController(); //gọi tên class
 ?>
 <?php
     if(isset($_GET['id'])){
@@ -42,7 +42,7 @@
         $anh_tin_tuc = $_FILES['anh_tin_tuc']['name'];
         $ten_tin_tuc = $_POST['ten_tin_tuc'];
         $mo_ta = $_POST['mo_ta'];
-        $update_data = $news->update_news($id,$tmp,$anh_tin_tuc,$ten_tin_tuc,$mo_ta);
+        $updateNews = $newsController->updateNews($id,$tmp,$anh_tin_tuc,$ten_tin_tuc,$mo_ta);
     }else{
         // echo "F";
     }
@@ -58,13 +58,13 @@
                         <div class="card-body">
                             <h4 class="card-title">Sửa tin tức</h4>
                             <?php
-                                if(isset($update_data)){
-                                    echo "<span>".$update_data."</span>";
+                                if(isset($updateNews)){
+                                    echo "<span>".$updateNews."</span>";
                                 }
                             ?>
                             <?php
-                                $get_id_news = $news->get_list_news_by_id($id);
-                                $row = $get_id_news->fetch_assoc();
+                                $selectNewId = $newsController->getNewsId($id);
+                                $row = $selectNewId->fetch_assoc();
                             ?>
                             <div class="form-group row" style="margin-top:10px;">
                                 <label for="lname" class="col-sm-3 text-right control-label col-form-label">Hình ảnh tin tức</label>

@@ -30,18 +30,18 @@
         <?php
             include '../admin/include/header.php';
             include '../admin/include/navigation.php';
-            include '../classes/product.php';
-            $product = new Product(); //gọi tên class
+            include '../controller/ProductController.php';
+            $productController = new ProductController(); //gọi tên class
         ?>
         <?php
             if(isset($_GET['product_id'])){
                 $product_id = $_GET['product_id'];
-                $delete_product = $product->delete_product($product_id);
-                if($delete_product){
-                    echo $delete_product;
+                $deleteProduct = $productController->deleteProduct($product_id);
+                if($deleteProduct){
+                    echo $deleteProduct;
                 }
             }
-            $number_page = $product->select_number_pages_admin();
+            $pagination = $productController->pagination();
             if(isset($_GET['sotrang'])){
                 $sotrang = $_GET['sotrang'];
             }else{
@@ -54,7 +54,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Danh sách khóa học</h5>
+                        <h5 class="card-title">Danh sách sản phẩm</h5>
                         <div class="table-responsive">
                             <form action="" method="post">
                                 <table id="zero_config" class="table table-striped table-bordered">
@@ -63,26 +63,26 @@
                                             <th>STT</th>
                                             <th>Tên danh mục</th>
                                             <th>Hình ảnh</th>
-                                            <th>Tên khóa học</th>
-                                            <!-- <th>Số lượng khóa học</th> -->
-                                            <th>Giá khóa học</th>
-                                            <th>Link khóa học</th>
-                                            <!-- <th>Mô tả khóa học</th> -->
+                                            <th>Tên sản phẩm</th>
+                                            <!-- <th>Số lượng sản phẩm</th> -->
+                                            <th>Giá sản phẩm</th>
+                                            <th>Link sản phẩm</th>
+                                            <!-- <th>Mô tả sản phẩm</th> -->
                                             <th>Chức năng</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
-                                            $show_cate = $product->get_all_product($sotrang);
-                                            if($show_cate){
+                                            $listProduct = $productController->listProduct($sotrang);
+                                            if($listProduct){
                                                 $i = 0;
-                                                while($value = $show_cate->fetch_assoc()){
+                                                while($value = $listProduct->fetch_assoc()){
                                                 $i++;
                                         ?>
                                         <tr align="center">
                                             <td width="50"><?php echo $i;?></td>
                                             <td width="100"><?php echo $value['name'];?></td>
-                                            <td><img style="width: 100px; height: 100px;" src="<?php echo $value['image_pr']?>" alt=""></td>
+                                            <td><img style="width: 100px; height: 100px;" src="./img/<?php echo $value['image_pr']?>" alt=""></td>
                                             <td width="50"><?php echo $value['name_pr'];?></td>
                                             <td><?php echo number_format($value['price'],0,'.','.');?>đ</td>
                                             <td><?php echo $value['link_ytb'];?></td>
@@ -100,7 +100,7 @@
                                 <nav aria-label="..." >
                                     <ul class="pagination pagination-sm" style="justify-content: center; margin-top:20px">
                                         <?php
-                                            for($j = 1; $j <= $number_page; $j++){
+                                            for($j = 1; $j <= $pagination; $j++){
                                         ?>
                                         <li class="page-item <?php echo ($j == $sotrang) ?  "disabled" : "" ?>">
                                             <a class="page-link" href="?sotrang=<?php echo $j?>" tabindex="-1"><?php echo $j;?></a>

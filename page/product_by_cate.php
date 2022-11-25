@@ -41,9 +41,9 @@
     include_once '../helpers/format.php';
     include_once '../lib/database.php';
     include_once '../lib/session.php';
-    spl_autoload_register(function($callName){
-        include_once '../classes/'.$callName.'.php';
-    });
+    // spl_autoload_register(function($callName){
+    //     include_once '../classes/'.$callName.'.php';
+    // });
     include_once './include/header.php';
 ?>
 <style>
@@ -152,7 +152,7 @@
     }
 </style>
 <?php
-    $product = new Product();
+    $product = new ProductController();
     if(isset($_GET['sort']) && isset($_GET['cate_id'])){
         $cate_id = $_GET['cate_id'];
         if(isset($_GET['sotrang'])){
@@ -169,8 +169,8 @@
                 $min = 0;
                 $max = 0;
             }
-            $sort = $product -> sort_product($cate_id,$asc,0,$min,$max,$sotrang);
-            $number_pages = $product->select_number_pages($cate_id);
+            $sort = $product->sortProduct($cate_id,$asc,0,$min,$max,$sotrang);
+            $number_pages = $product->paginationPage($cate_id);
 
             // echo $sort;
         }else if($_GET['sort'] == 'price_desc'){
@@ -182,8 +182,8 @@
                 $min = 0;
                 $max = 0;
             }
-            $sort = $product -> sort_product($cate_id,0,$desc,$min,$max,$sotrang);
-            $number_pages = $product->select_number_pages($cate_id);
+            $sort = $product->sortProduct($cate_id,0,$desc,$min,$max,$sotrang);
+            $number_pages = $product->paginationPage($cate_id);
 
             // echo $sort;
         }
@@ -225,7 +225,7 @@
                 <a href="details.php?product_id=<?php echo $row['product_id'];?>">
                     <div class="bbb_deals_slider_container">
                         <div class=" bbb_deals_item">
-                            <div class="bbb_deals_image"><img style="width:300px; height:150px;" src="<?php echo $row['image_pr'];?>" alt=""></div>
+                            <div class="bbb_deals_image"><img style="width:300px; height:150px;" src="../admin/img/<?php echo $row['image_pr'];?>" alt=""></div>
                             <div class="bbb_deals_content">
                                 <div class="bbb_deals_info_line d-flex flex-row justify-content-start">
                                     <div class="bbb_deals_item_category"><a href="#"><?php echo $row['name'];?></a></div>
@@ -236,7 +236,7 @@
                                 </div>
                                 <div class="available">
                                     <div class="available_line d-flex flex-row justify-content-start">
-                                        <div class="available_title">Còn: <span><?php echo $row['quantity'];?></span> khóa học</div>
+                                        <div class="available_title">Còn: <span><?php echo $row['quantity'];?></span> sản phẩm</div>
                                         <div class="sold_stars ml-auto"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div>
                                     </div>
                                     <div class="available_bar"><span style="width:17%"></span></div>
@@ -264,8 +264,8 @@
             }
             $gia_thap_nhat = $_POST['gia_thap_nhat'];
             $gia_cao_nhat = $_POST['gia_cao_nhat'];
-            $number_pages = $product->select_number_pages_by_price($cate_id,$gia_thap_nhat,$gia_cao_nhat);
-            $search_currency = $product -> find_currency($cate_id,$gia_thap_nhat,$gia_cao_nhat,$sotrang);
+            $number_pages = $product->filterPrice($cate_id,$gia_thap_nhat,$gia_cao_nhat);
+            $search_currency = $product->findPrice($cate_id,$gia_thap_nhat,$gia_cao_nhat,$sotrang);
             if($gia_cao_nhat == "" && $gia_thap_nhat == ""){
             
         ?>
@@ -310,7 +310,7 @@
                 <a href="details.php?product_id=<?php echo $row['product_id'];?>">
                     <div class="bbb_deals_slider_container">
                         <div class=" bbb_deals_item">
-                            <div class="bbb_deals_image"><img style="width:300px; height:150px;" src="<?php echo $row['image_pr'];?>" alt=""></div>
+                            <div class="bbb_deals_image"><img style="width:300px; height:150px;" src="../admin/img/<?php echo $row['image_pr'];?>" alt=""></div>
                             <div class="bbb_deals_content">
                                 <div class="bbb_deals_info_line d-flex flex-row justify-content-start">
                                     <div class="bbb_deals_item_category"><a href="#"><?php echo $row['name'];?></a></div>
@@ -321,7 +321,7 @@
                                 </div>
                                 <div class="available">
                                     <div class="available_line d-flex flex-row justify-content-start">
-                                        <div class="available_title">Còn: <span><?php echo $row['quantity'];?></span> khóa học</div>
+                                        <div class="available_title">Còn: <span><?php echo $row['quantity'];?></span> sản phẩm</div>
                                         <div class="sold_stars ml-auto"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div>
                                     </div>
                                     <div class="available_bar"><span style="width:17%"></span></div>
@@ -342,8 +342,8 @@
                 }else{
                     $sotrang = "";
                 }
-                $number_pages = $product->select_number_pages($cate_id);
-                $select_product_by_cate_id = $product->get_id_category($cate_id,$sotrang);
+                $number_pages = $product->pagination($cate_id);
+                $select_product_by_cate_id = $product->getCateId($cate_id,$sotrang);
         ?>
     </div>
 </div>
@@ -400,7 +400,7 @@
                 <a href="details.php?product_id=<?php echo $row['product_id'];?>">
                     <div class="bbb_deals_slider_container">
                         <div class=" bbb_deals_item">
-                            <div class="bbb_deals_image"><img style="width:300px; height:150px;" src="<?php echo $row['image_pr'];?>" alt=""></div>
+                            <div class="bbb_deals_image"><img style="width:300px; height:150px;" src="../admin/img/<?php echo $row['image_pr'];?>" alt=""></div>
                             <div class="bbb_deals_content">
                                 <div class="bbb_deals_info_line d-flex flex-row justify-content-start">
                                     <div class="bbb_deals_item_category"><a href="#"><?php echo $row['name'];?></a></div>
@@ -411,7 +411,7 @@
                                 </div>
                                 <div class="available">
                                     <div class="available_line d-flex flex-row justify-content-start">
-                                        <div class="available_title">Còn: <span><?php echo $row['quantity'];?></span> khóa học</div>
+                                        <div class="available_title">Còn: <span><?php echo $row['quantity'];?></span> sản phẩm</div>
                                         <div class="sold_stars ml-auto"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div>
                                     </div>
                                     <div class="available_bar"><span style="width:17%"></span></div>
