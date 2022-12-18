@@ -370,17 +370,18 @@ button {
     float: left;
     font-size: 16px;
     color: #ffffff;
-    background-color: #143a51;
+    background-color: #d8a224;
+    border-radius: 10px;
     text-align: center;
     padding: 10px 0px;
 }
 .buynow_bt a:hover{
     color: #ffffff;
-    background-color: #ff5d68;
+    background-color: green;
 }
 .buynow_bt.active a{
     color: #ffffff;
-    background-color: #ff5d68;
+    /* background-color: #ff5d68; */
 }
 
 .contact_bt{
@@ -394,11 +395,12 @@ button {
     font-size: 16px;
     color: #ffffff;
     background-color: #143a51;
+    border-radius: 10px;
     text-align: center;
     padding: 10px 0px;
 }
 .contact_bt a:hover{
-    background-color: #ff5d68;
+    background-color: green;
     color: #ffffff;
 }
 
@@ -538,7 +540,8 @@ button {
     float: left;
     font-size: 14px;
     color: #ffffff;
-    background-color: #ff5d68;
+    background-color: #d8a224;
+    border-radius: 10px;
     text-align: center;
     padding: 8px 14px;
 }
@@ -562,7 +565,8 @@ button {
     padding: 8px 0px 0px 0px;
 }
 .rate_text a {
-    color: #ff5d68;
+    /* color: #ff5d68; */
+    color: green;
 }
 
 .rate_text_1 {
@@ -639,7 +643,8 @@ button {
     font-weight: bold;
 }
 .price_text a{
-    color: #ff5d68;
+    /* color: #ff5d68; */
+    color: green;
 }
 
 .price_text_1 {
@@ -664,7 +669,8 @@ button {
     float: left;
     font-size: 14px;
     color: #ffffff;
-    background-color: #ff5d68;
+    background-color: #d8a224;
+    border-radius: 10px;
     text-align: center;
     padding: 8px 4px;
 }
@@ -718,7 +724,8 @@ button {
     float: left;
     font-size: 16px;
     color: #ffffff;
-    background-color: #ff5d68;
+    background-color: #d8a224;
+    border-radius: 10px;
     text-align: center;
     padding: 10px 0px;
     margin-top: 20px;
