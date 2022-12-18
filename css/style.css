@@ -377,7 +377,7 @@ button {
 }
 .buynow_bt a:hover{
     color: #ffffff;
-    background-color: green;
+    background-color: #403f3f;
 }
 .buynow_bt.active a{
     color: #ffffff;
@@ -400,7 +400,7 @@ button {
     padding: 10px 0px;
 }
 .contact_bt a:hover{
-    background-color: green;
+    background-color: #403f3f;
     color: #ffffff;
 }
 
@@ -463,7 +463,7 @@ button {
     width: 100%;
     float: left;
     font-size: 24px;
-    color: #fffefd;
+    color: #d8a224;
     text-align: center;
     font-weight: bold;
     text-transform: uppercase;
@@ -486,10 +486,10 @@ button {
     padding: 0px 10px;
 }
 .catagary_menu li a{
-    color: #ffffff;
+    color: #d8a224;
 }
 .catagary_menu li a:hover{
-    color: #ff5d68;
+    color: #ffffff;
 }
 .catagary_section_2{
     width: 100%;
@@ -899,7 +899,7 @@ button {
     width: 100%;
     float: left;
     font-size: 26px;
-    color: #f7f7f7;
+    color: #d8a224;
     font-weight: bold;
 }
 
@@ -907,7 +907,7 @@ button {
     width: 99%;
     float: left;
     font-size: 14px;
-    color: #cbc9c9;
+    color: #d8a224;
     margin: 0px;
 }
 
@@ -916,16 +916,16 @@ button {
     width: 100%;
     float: left;
     font-size: 14px;
-    color: #cbc9c9;
+    color: #d8a224;
     padding-top: 10px
 }
 
 .call_text a {
-    color: #cbc9c9;
+    color: #d8a224;
 }
 
 .call_text a:hover {
-    color: #ff5d68;
+    color: #ffffff;
 }
 
 .paddlin_left_0 {
@@ -944,15 +944,15 @@ button {
     width: 100%;
     float: left;
     font-size: 14px;
-    color: #cbc9c9;
+    color: #d8a224;
 }
 
 .footer_menu li a {
-    color: #cbc9c9;
+    color: #d8a224;
 }
 
 .footer_menu li a:hover {
-    color: #ff5d68;
+    color: #ffffff;
 }
 
 
@@ -975,10 +975,11 @@ button {
 
 .copyright_text a {
     color: #ffffff;
+    text-decoration: underline;
 }
 
 .copyright_text a:hover {
-    color: #ff5d68;
+    color: #d8a224;
 }
 
 .margin_top_90 {
