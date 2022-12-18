@@ -157,7 +157,7 @@ CREATE TABLE `contact` (
 --
 
 INSERT INTO `contact` (`id_lh`, `ten_lh`, `email_lh`, `sdt_lh`) VALUES
-(1, 'Kiều Đặng Bảo Sơn', 'kdbs3005@gmail.com', '0399569112');
+(1, 'Dương Thu Hồng', 'kdbs3005@gmail.com', '0399569112');
 
 -- --------------------------------------------------------
 
